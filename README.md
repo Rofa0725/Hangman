@@ -1,6 +1,6 @@
 #Hangman
 
-=======
+---
 
 ###A client-server guessing game (a variant of the two-player "Hangman" game)
 
