@@ -2,14 +2,19 @@ package guessinggame;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.PrintWriter;
 import static java.lang.String.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class ServerHandler implements Runnable {
 
@@ -41,6 +46,7 @@ public class ServerHandler implements Runnable {
             try {
                 
                 msg = receiveMsgFromClient();
+                String[] msgList = msg.split(" ");
                 System.out.println(msg);
                 Thread.sleep(DELAY_SECS * secsToMillis);
                 //start game
@@ -55,6 +61,16 @@ public class ServerHandler implements Runnable {
                     out.close();
                     break;
                 } //msg is guess for the answer
+                else if (msgList[0].equals("*hint")) {
+                    String replayHint = Hint();
+                    sendReply(replayHint);
+                } else if (msgList[0].equals("*Add")) {
+                    String ReplyADD = AddWord(msgList[1]);
+                    sendReply(ReplyADD);
+                } else if (msgList[0].equals("*getAnswer")) {
+                    sendReply(answer);
+                    
+                }
                 else {
                     String reply = evaluateGuess(msg);
                     sendReply(reply);
@@ -190,6 +206,80 @@ public class ServerHandler implements Runnable {
         } catch (IOException e) {
             System.out.println(e.toString());
         }
+    }
+    
+    String Hint() {
+        String result = null;
+        int loopbreaker = 1;// counter to break out the while loop 
+        int randomNum = 0;
+        char hintchar = ' ';
+        //generete randome number with a range of the word length
+        while (loopbreaker == 1) {
+            randomNum = (int) (Math.random() * answer.length());
+            hintchar = answer.charAt(randomNum);
+            System.out.println(hintchar);
+
+            // Check if the letter already guessed or not
+            for (int i = 0; i < template.length; i++) {
+                if (hintchar == template[i]) {
+                    loopbreaker = 1;
+                    break;
+                } else {
+                    loopbreaker--;
+                }
+            }// for loop
+        }// while loop 
+        
+        // add the letter to the templete and send it to the client
+        template[randomNum] = hintchar;
+        result = String.valueOf(template);
+
+        return result = String.valueOf(template);
+    }
+
+    String AddWord(String word) {
+        String Replay = "";
+        Scanner in = new Scanner(System.in);
+        ArrayList<String> arrayOfStrings = new ArrayList<String>();
+
+        try {
+
+            // put all the words from the dictionary to an array list so it will be easy to search
+            BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                arrayOfStrings.add(line);
+
+            }
+            reader.close();
+            PrintWriter v = new PrintWriter(sourceFile);
+            int counter = 0;
+
+            // check if the word already exict in the dictionary
+            for (String readline : arrayOfStrings) {
+                v.println(readline);
+            }
+            for (String readline : arrayOfStrings) {
+                if (readline.equalsIgnoreCase(word)) {
+                    System.out.println("exist");
+                    counter = 1;
+                    Replay = "not added";
+                    break;
+                } else {
+                    counter = -1;
+                    Replay = "Added";
+                }
+            }
+            if (counter == -1) {
+                System.out.println("not exist");
+                v.println(word);
+            }
+            v.close();
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
+
+        return Replay;
     }
 
 }
