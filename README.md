@@ -2,7 +2,6 @@
 
 ---
 + Added a new method that the player can now have a Hint to the word , Add words to the dictionary , Modified the score counter beacouse there were a problem when the player have ZERO score and he lost the round his score will go to -1 +
-+ I used this code for a Network project so i did mead the interface more user friendly +
 
 
 ###A client-server guessing game (a variant of the two-player "Hangman" game)
