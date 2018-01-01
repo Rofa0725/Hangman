@@ -26,6 +26,8 @@ public class Client
     private DataOutputStream out;
     private Socket clientSocket;
     private ServerSocket serverSocket;
+    public int hintcounter = 1;
+
     
     private String word, msg;
     
@@ -111,6 +113,63 @@ public class Client
         {
             ex.printStackTrace();
         }
+        
+    }
+    
+    public String SendHint() {
+        hintcounter--; // decrease the counter one the player pressed hint , no more than one hint 
+        String hintReply = "";
+        try {
+            String hintcomm = "*hint";
+            byte[] toServer = hintcomm.getBytes();
+            out.write(toServer, 0, toServer.length);
+
+            byte[] fromServer = new byte[256];
+            int n;
+            n = in.read(fromServer, 0, 256);
+            hintReply = new String(fromServer); 
+            hintReply = hintReply.substring(0, n); 
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return hintReply;
+    }
+    
+    public String SendWordToAdd(String word){
+          String ADDReply = "";
+        try {
+           
+            String AddMsg = "*Add "+word;           
+            byte[] toServer = AddMsg.getBytes();
+            out.write(toServer, 0, toServer.length);
+
+            byte[] fromServer = new byte[256];
+            int n;
+            n = in.read(fromServer, 0, 256);
+            ADDReply = new String(fromServer);
+            ADDReply = ADDReply.substring(0, n);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return ADDReply;
+    }
+    
+    public String getAnswer(){
+          String AnswerReply = "";
+        try {
+            String AnswerMsg = "*getAnswer";
+            byte[] toServer = AnswerMsg.getBytes();
+            out.write(toServer, 0, toServer.length);
+
+            byte[] fromServer = new byte[256];
+            int n;
+            n = in.read(fromServer, 0, 256);
+            AnswerReply = new String(fromServer);
+            AnswerReply = AnswerReply.substring(0, n);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return AnswerReply;
         
     }
    
