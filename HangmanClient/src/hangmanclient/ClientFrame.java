@@ -7,6 +7,16 @@ package hangmanclient;
 
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import java.awt.Toolkit;
+import java.io.IOException;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+
+
 
 /**
  *
@@ -23,6 +33,12 @@ public class ClientFrame extends javax.swing.JFrame
     public ClientFrame()
     {
         initComponents();
+        setIcon();
+    }
+    
+    private void setIcon() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("IconFrame.png")));
+       
     }
 
     /**
@@ -35,6 +51,7 @@ public class ClientFrame extends javax.swing.JFrame
     private void initComponents()
     {
 
+        jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtIP = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -52,168 +69,194 @@ public class ClientFrame extends javax.swing.JFrame
         txtScore = new javax.swing.JTextField();
         txtStep = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
+        btnHint = new javax.swing.JButton();
+        AddWord = new javax.swing.JButton();
+        BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter()
-        {
-            public void windowClosing(java.awt.event.WindowEvent evt)
-            {
+        setTitle("Hangman Game");
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLocationByPlatform(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
+        jPanel2.setLayout(null);
+
+        jLabel1.setFont(new java.awt.Font("Eras Light ITC", 0, 20)); // NOI18N
         jLabel1.setText("IP: ");
+        jPanel2.add(jLabel1);
+        jLabel1.setBounds(110, 20, 30, 30);
 
         txtIP.setText("localhost");
+        txtIP.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtIP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIPActionPerformed(evt);
+            }
+        });
+        jPanel2.add(txtIP);
+        txtIP.setBounds(140, 20, 170, 30);
 
+        jLabel2.setFont(new java.awt.Font("Eras Light ITC", 0, 20)); // NOI18N
         jLabel2.setText("Port: ");
+        jPanel2.add(jLabel2);
+        jLabel2.setBounds(370, 20, 50, 30);
 
         txtPort.setText("4444");
+        txtPort.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.add(txtPort);
+        txtPort.setBounds(420, 20, 90, 30);
 
+        btnConnect.setFont(new java.awt.Font("Eras Demi ITC", 0, 16)); // NOI18N
         btnConnect.setText("Connect");
-        btnConnect.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnConnect.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        btnConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConnectActionPerformed(evt);
             }
         });
+        jPanel2.add(btnConnect);
+        btnConnect.setBounds(540, 10, 120, 40);
 
+        jLabel3.setFont(new java.awt.Font("Eras Light ITC", 0, 20)); // NOI18N
         jLabel3.setText("Input a letter or a word: ");
+        jPanel2.add(jLabel3);
+        jLabel3.setBounds(60, 160, 200, 30);
 
-        txtGuessed.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
+        txtGuessed.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtGuessed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtGuessedActionPerformed(evt);
+            }
+        });
+        txtGuessed.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtGuessedKeyPressed(evt);
             }
         });
+        jPanel2.add(txtGuessed);
+        txtGuessed.setBounds(270, 160, 210, 30);
 
+        btnGuess.setFont(new java.awt.Font("Eras Demi ITC", 1, 16)); // NOI18N
         btnGuess.setText("Guess");
-        btnGuess.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnGuess.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        btnGuess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuessActionPerformed(evt);
             }
         });
+        jPanel2.add(btnGuess);
+        btnGuess.setBounds(540, 150, 120, 40);
 
+        jSeparator1.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jSeparator1);
+        jSeparator1.setBounds(10, 58, 680, 2);
+
+        btnStartNewGame.setFont(new java.awt.Font("Eras Demi ITC", 0, 16)); // NOI18N
         btnStartNewGame.setText("Start a new game");
+        btnStartNewGame.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         btnStartNewGame.setEnabled(false);
-        btnStartNewGame.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnStartNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnStartNewGameActionPerformed(evt);
             }
         });
+        jPanel2.add(btnStartNewGame);
+        btnStartNewGame.setBounds(50, 80, 200, 40);
 
+        jLabel4.setFont(new java.awt.Font("Eras Light ITC", 0, 20)); // NOI18N
         jLabel4.setText("Score: ");
+        jPanel2.add(jLabel4);
+        jLabel4.setBounds(160, 240, 60, 30);
 
+        jLabel5.setFont(new java.awt.Font("Eras Light ITC", 0, 20)); // NOI18N
         jLabel5.setText("Steps:");
+        jPanel2.add(jLabel5);
+        jLabel5.setBounds(340, 240, 60, 30);
 
-        jLabel6.setText("The word: ");
+        jLabel6.setFont(new java.awt.Font("Eras Light ITC", 0, 20)); // NOI18N
+        jLabel6.setText("The word :  ");
+        jPanel2.add(jLabel6);
+        jLabel6.setBounds(190, 310, 120, 30);
 
         txtWord.setEditable(false);
-        txtWord.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        txtWord.setBackground(new java.awt.Color(173, 162, 196));
+        txtWord.setFont(new java.awt.Font("Leelawadee", 1, 20)); // NOI18N
+        txtWord.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtWord.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtWordActionPerformed(evt);
+            }
+        });
+        jPanel2.add(txtWord);
+        txtWord.setBounds(320, 310, 210, 30);
 
         txtScore.setEditable(false);
-        txtScore.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        txtScore.setBackground(new java.awt.Color(173, 162, 196));
+        txtScore.setFont(new java.awt.Font("Eras Bold ITC", 0, 20)); // NOI18N
+        txtScore.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        txtScore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtScoreActionPerformed(evt);
+            }
+        });
+        jPanel2.add(txtScore);
+        txtScore.setBounds(230, 240, 50, 30);
 
         txtStep.setEditable(false);
-        txtStep.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        txtStep.setBackground(new java.awt.Color(173, 162, 196));
+        txtStep.setFont(new java.awt.Font("Eras Bold ITC", 0, 20)); // NOI18N
+        txtStep.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel2.add(txtStep);
+        txtStep.setBounds(400, 240, 50, 30);
+
+        jSeparator2.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jSeparator2);
+        jSeparator2.setBounds(10, 220, 680, 20);
+
+        btnHint.setFont(new java.awt.Font("Eras Demi ITC", 0, 16)); // NOI18N
+        btnHint.setText("Hint");
+        btnHint.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        btnHint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHintActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnHint);
+        btnHint.setBounds(540, 240, 120, 40);
+
+        AddWord.setFont(new java.awt.Font("Eras Demi ITC", 0, 16)); // NOI18N
+        AddWord.setText("Add Word");
+        AddWord.setActionCommand("AddWord");
+        AddWord.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        AddWord.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddWordActionPerformed(evt);
+            }
+        });
+        jPanel2.add(AddWord);
+        AddWord.setBounds(540, 80, 120, 40);
+
+        BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/hangmanclient/final BG.png"))); // NOI18N
+        jPanel2.add(BG);
+        BG.setBounds(0, 0, 720, 614);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator2))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(btnStartNewGame))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtIP, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnConnect)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel4)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtScore, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel5)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtStep, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(txtGuessed, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(btnGuess, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtWord, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))))
-                .addGap(15, 15, 15))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnConnect))
-                .addGap(4, 4, 4)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(btnStartNewGame)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtGuessed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGuess))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(txtScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtStep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                     
 
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnConnectActionPerformed
     {//GEN-HEADEREND:event_btnConnectActionPerformed
@@ -266,10 +309,12 @@ public class ClientFrame extends javax.swing.JFrame
                         btnStartNewGame.setEnabled(true);
                         txtGuessed.setText("");
                         JOptionPane.showMessageDialog(btnConnect, "You loose!");
+                        break;
                     case "uncompleted":
                         txtWord.setText(msgList[1]);
                         txtStep.setText(msgList[2]);
                         txtGuessed.setText("");
+                        break;
 
                 }
 
@@ -288,6 +333,9 @@ public class ClientFrame extends javax.swing.JFrame
             public void run()
             {
                 btnGuess.setEnabled(true);
+                btnHint.setEnabled(true);
+                AddWord.setEnabled(true);
+                
                 String temp[];
                 String str;
                 str = client.StartNewGame();
@@ -350,6 +398,54 @@ public class ClientFrame extends javax.swing.JFrame
         // TODO add your handling code here:
         client.Disconnect();
     }//GEN-LAST:event_formWindowClosing
+    
+    private void btnHintActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+        if(client.hintcounter != 0){
+        String hint = client.SendHint();
+        txtWord.setText(hint);
+        String msg = client.SendGuess(hint);
+        String[] msgList = msg.split(",");
+                    switch (msgList[0]) {
+                        case "win":
+                            txtWord.setText(msgList[1]);
+                            txtScore.setText(msgList[2]);
+                            btnGuess.setEnabled(false);
+                            btnStartNewGame.setEnabled(true);
+                            txtGuessed.setText("");
+                            JOptionPane.showMessageDialog(btnConnect, "You win!");
+                            break;
+                        case "loose":
+                            btnGuess.setEnabled(false);
+                            btnStartNewGame.setEnabled(true);
+                            txtGuessed.setText("");
+                            JOptionPane.showMessageDialog(btnConnect, "You loose!");
+                        case "uncompleted":
+                            txtWord.setText(msgList[1]);
+                            txtStep.setText(msgList[2]);
+                            txtGuessed.setText("");
+                    }
+        }
+        else 
+            JOptionPane.showMessageDialog(btnConnect,"you had your chance");
+            
+
+    }
+    
+     private void AddWordActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+        String word = client.SendWordToAdd(txtGuessed.getText());
+        if (word.equalsIgnoreCase("Added")){
+            // after the word been added show a message to the player
+            JOptionPane.showMessageDialog(btnConnect, "word has been added to the dictionary ");
+        }
+        else {
+            // after the word been Rejected show a message to the player
+            JOptionPane.showMessageDialog(btnConnect, "the word already exist!");
+        }
+        
+        txtGuessed.setText(""); // clear the text filed after adding the word / or not to the dictionary
+  }                           
 
     /**
      * @param args the command line arguments
@@ -397,6 +493,9 @@ public class ClientFrame extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddWord;
+    private javax.swing.JLabel BG;
+    private javax.swing.JButton btnHint;
     private javax.swing.JButton btnConnect;
     private javax.swing.JButton btnGuess;
     private javax.swing.JButton btnStartNewGame;
@@ -406,6 +505,7 @@ public class ClientFrame extends javax.swing.JFrame
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField txtGuessed;
